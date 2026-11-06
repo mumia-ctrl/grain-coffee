@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRAIN Coffee</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #1c1c1c;
+            --bg-secondary: #2a2a2a;
+            --bg-card: #2e2e2e;
+            --text-primary: #ffffff;
+            --text-secondary: #d0d0d0;
+            --text-muted: #888888;
+            --accent: #7a9e7e;
+            --accent-hover: #6a8e6e;
+            --border: #3a3a3a;
+            --shadow: rgba(0,0,0,0.3);
+        }
+
+        body.light-theme {
+            --bg-primary: #f5f5f5;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --text-primary: #1c1c1c;
+            --text-secondary: #555555;
+            --text-muted: #888888;
+            --border: #e0e0e0;
+            --shadow: rgba(0,0,0,0.1);
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 40px 70px 20px;
+        }
+
+        .logo {
+            font-size: 56px;
+            font-weight: 300;
+            letter-spacing: 24px;
+            color: var(--text-muted);
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-btn {
+            background: none;
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            color: var(--text-primary);
+        }
+
+        .header-btn:hover {
+            border-color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        .lang-btn {
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 22px;
+            width: auto;
+            padding: 0 14px;
+            letter-spacing: 1px;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            padding: 10px;
+        }
+
+        .cart-icon svg { width: 32px; height: 32px; }
+
+        .cart-badge {
+            position: absolute;
+            top: 0; right: 0;
+            background-color: var(--accent);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            width: 22px; height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translate(8px, -8px);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 80px 20px 100px;
+            background: linear-gradient(rgba(28,28,28,0.7), rgba(28,28,28,0.8)),
+                        url('images/hero.jpg.jpg') center/cover;
+        }
+
+        body.light-theme .hero {
+            background: linear-gradient(rgba(245,245,245,0.7), rgba(245,245,245,0.8)),
+                        url('images/hero.jpg.jpg') center/cover;
+        }
+
+        .hero h1 {
+            font-size: 46px;
+            font-weight: 700;
+            max-width: 720px;
+            margin: 0 auto 45px;
+            line-height: 1.25;
+        }
+
+        .btn-reserve {
+            display: inline-block;
+            background-color: var(--text-primary);
+            color: var(--bg-primary);
+            padding: 18px 70px;
+            border: none;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-reserve:hover { opacity: 0.9; transform: scale(1.02); }
+
+        .philosophy {
+            text-align: center;
+            padding: 80px 20px;
+            max-width: 950px;
+            margin: -40px auto 0;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 10px 40px var(--shadow);
+        }
+
+        .philosophy h2 { font-size: 40px; margin-bottom: 30px; }
+        .philosophy p { font-size: 21px; color: var(--text-secondary); line-height: 1.7; }
+
+        .menu-section { text-align: center; padding: 80px 20px 70px; }
+        .menu-section h2 { font-size: 34px; margin-bottom: 30px; }
+
+        /* Поиск */
+        .search-container {
+            max-width: 450px;
+            margin: 0 auto 40px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 20px 14px 50px;
+            border-radius: 30px;
+            border: 2px solid var(--border);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(122, 158, 126, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        .menu-cards {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border-radius: 18px;
+            width: 310px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s, box-shadow 0.3s;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px var(--shadow);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+        .card:nth-child(5) { animation-delay: 0.5s; }
+        .card:nth-child(6) { animation-delay: 0.6s; }
+
+        .card-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-bottom: 3px solid var(--accent);
+        }
+
+        .card-content {
+            padding: 25px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .card h3 { font-size: 19px; font-weight: 600; margin-bottom: 10px; }
+        .card .price { font-size: 17px; color: var(--accent); font-weight: 600; margin-bottom: 15px; }
+
+        .btn-cart {
+            background-color: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 11px 28px;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+            margin-top: auto;
+        }
+
+        .btn-cart:hover { background-color: var(--accent-hover); transform: scale(1.05); }
+        .btn-cart.added { background-color: #5a7e5e; pointer-events: none; }
+
+        .no-results {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            font-size: 18px;
+            grid-column: 1 / -1;
+        }
+
+        .visit {
+            text-align: center;
+            padding: 80px 20px 40px;
+            background: linear-gradient(rgba(28,28,28,0.85), rgba(28,28,28,0.9)),
+                        url('images/interior.jpg') center/cover fixed;
+        }
+
+        body.light-theme .visit {
+            background: linear-gradient(rgba(245,245,245,0.85), rgba(245,245,245,0.9)),
+                        url('images/interior.jpg') center/cover fixed;
+        }
+
+        .visit h2 { font-size: 34px; margin-bottom: 70px; }
+
+        .visit-info {
+            display: flex;
+            justify-content: space-between;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        .visit-info p { font-size: 17px; color: var(--text-secondary); }
+        .visit-info .hours { font-weight: 600; }
+
+        footer {
+            text-align: center;
+            padding: 35px 20px;
+            border-top: 1px solid var(--border);
+            background-color: var(--bg-secondary);
+        }
+
+        footer p { font-size: 14px; color: var(--text-muted); }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px; right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        .modal h2 { font-size: 28px; margin-bottom: 25px; }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .cart-item-name { font-size: 16px; font-weight: 600; }
+        .cart-item-price { font-size: 14px; color: var(--text-muted); }
+
+        .qty-btn {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: none;
+            color: var(--text-primary);
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .qty-btn:hover { background: var(--accent); border-color: var(--accent); }
+        .cart-item-qty { font-size: 16px; font-weight: 600; min-width: 20px; text-align: center; }
+        .cart-item-remove { background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 20px; }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 20px;
+            border-top: 2px solid var(--border);
+            margin-bottom: 25px;
+        }
+
+        .cart-total-label { font-size: 20px; font-weight: 600; }
+        .cart-total-price { font-size: 24px; font-weight: 700; color: var(--accent); }
+
+        .btn-checkout, .btn-submit {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            margin-top: 10px;
+        }
+
+        .btn-checkout { background: var(--accent); color: #fff; }
+        .btn-checkout:hover { background: var(--accent-hover); }
+        .btn-submit { background: var(--text-primary); color: var(--bg-primary); }
+        .btn-submit:hover { opacity: 0.9; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 14px; color: var(--text-muted); margin-bottom: 8px; }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 16px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--accent);
+            color: #fff;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 16px;
+            z-index: 2000;
+            transition: transform 0.4s;
+        }
+
+        .notification.show { transform: translateX(-50%) translateY(0); }
+        .cart-empty { text-align: center; padding: 40px 0; color: var(--text-muted); font-size: 18px; }
+
+        .scroll-top-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            display: none;
+            z-index: 999;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .scroll-top-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-3px);
+        }
+
+        .scroll-top-btn.visible {
+            display: flex;
+        }
+
+        @media (max-width: 768px) {
+            .header { padding: 20px 20px 15px; }
+            .logo { font-size: 28px; letter-spacing: 10px; }
+            .hero { padding: 50px 20px 70px; }
+            .hero h1 { font-size: 26px; margin-bottom: 30px; }
+            .btn-reserve { padding: 14px 40px; font-size: 15px; }
+            .philosophy { padding: 40px 20px; margin: -30px 15px 0; }
+            .philosophy h2 { font-size: 24px; }
+            .philosophy p { font-size: 16px; }
+            .menu-section { padding: 50px 15px 50px; }
+            .menu-section h2 { font-size: 24px; margin-bottom: 20px; }
+            .search-container { margin: 0 15px 30px; }
+            .search-input { padding: 12px 18px 12px 45px; font-size: 15px; }
+            .menu-cards { flex-direction: column; align-items: center; gap: 20px; }
+            .card { width: 100%; max-width: 340px; }
+            .visit { padding: 50px 20px 30px; }
+            .visit h2 { font-size: 24px; margin-bottom: 40px; }
+            .visit-info { flex-direction: column; gap: 15px; align-items: center; padding: 0 20px; }
+            .modal { padding: 25px 20px; width: 95%; }
+            .modal h2 { font-size: 22px; }
+            .scroll-top-btn { bottom: 20px; right: 20px; width: 45px; height: 45px; font-size: 20px; }
+        }
+
+        @media (max-width: 480px) {
+            .logo { font-size: 24px; letter-spacing: 8px; }
+            .hero h1 { font-size: 22px; }
+            .philosophy h2 { font-size: 20px; }
+            .philosophy p { font-size: 14px; }
+            .menu-section h2 { font-size: 20px; }
+            .card { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="logo">GRAIN</div>
+        <div class="header-controls">
+            <button class="header-btn lang-btn" id="langBtn" title="Language">RU</button>
+            <button class="header-btn" id="themeToggle" title="Theme">🌙</button>
+            <button class="cart-icon" id="cartBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                </svg>
+                <span class="cart-badge" id="cartBadge" style="display:none;">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <h1 data-i18n="hero_title">Свежеобжаренный спешелти кофе и уют в каждой детали.</h1>
+        <button class="btn-reserve" id="reserveBtn" data-i18n="btn_reserve">Забронировать столик</button>
+    </section>
+
+    <!-- PHILOSOPHY -->
+    <section class="philosophy">
+        <h2 data-i18n="philosophy_title">Философия GRAIN</h2>
+        <p data-i18n="philosophy_text">Мы верим, что идеальный кофе начинается с правильного зерна. Сами привозим спешелти-лорта из Эфиопии и Колумбии, обжариваем их каждую неделю и бережно завариваем для тех, кто ценит настоящий вкус и тишину в большом городе.</p>
+    </section>
+
+    <!-- MENU -->
+    <section class="menu-section">
+        <h2 data-i18n="menu_title">Наше Спешелти Меню</h2>
+        
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" class="search-input" 
+                   data-i18n-placeholder="search_placeholder" 
+                   placeholder="Поиск по меню...">
+        </div>
+        
+        <div class="menu-cards" id="menuCards"></div>
+    </section>
+
+    <!-- VISIT -->
+    <section class="visit">
+        <h2 data-i18n="visit_title">Ждем вас в гости</h2>
+        <div class="visit-info">
+            <p class="hours" data-i18n="visit_hours">Ежедневно с 8:00 до 22:00</p>
+            <p data-i18n="visit_address">ул. Мира, 53</p>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p data-i18n="footer_text">© 2026 GRAIN Coffee. Все права защищены</p>
+    </footer>
+
+    <!-- CART MODAL -->
+    <div class="modal-overlay" id="cartModal">
+        <div class="modal">
+            <button class="modal-close" id="cartClose">&times;</button>
+            <h2 data-i18n="cart_title">🛒 Корзина</h2>
+            <div id="cartContent"></div>
+        </div>
+    </div>
+
+    <!-- RESERVE MODAL -->
+    <div class="modal-overlay" id="reserveModal">
+        <div class="modal">
+            <button class="modal-close" id="reserveClose">&times;</button>
+            <h2 data-i18n="reserve_title">📋 Бронирование столика</h2>
+            <form id="reserveForm">
+                <div class="form-group">
+                    <label data-i18n="form_name">Ваше имя</label>
+                    <input type="text" id="resName" data-i18n-placeholder="form_name_placeholder" placeholder="Как к вам обращаться?" required>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="form_phone">Телефон</label>
+                    <input type="tel" id="resPhone" data-i18n-placeholder="form_phone_placeholder" placeholder="+7 (___) ___-__-__" required>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="form_date">Дата</label>
+                    <input type="date" id="resDate" required>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="form_time">Время</label>
+                    <input type="time" id="resTime" required>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="form_guests">Количество гостей</label>
+                    <select id="resGuests" required>
+                        <option value="" data-i18n="form_select">Выберите...</option>
+                        <option value="1" data-i18n="guest_1">1 человек</option>
+                        <option value="2" data-i18n="guest_2">2 человека</option>
+                        <option value="3" data-i18n="guest_3">3 человека</option>
+                        <option value="4" data-i18n="guest_4">4 человека</option>
+                        <option value="5" data-i18n="guest_5">5 человек</option>
+                        <option value="6" data-i18n="guest_6">6+ человек</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-submit" data-i18n="btn_submit">Забронировать</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- NOTIFICATION -->
+    <div class="notification" id="notification"></div>
+
+    <!-- SCROLL TO TOP BUTTON -->
+    <button class="scroll-top-btn" id="scrollTopBtn" title="Наверх">↑</button>
+
+    <script>
+        // ===== ПЕРЕМЕННЫЕ =====
+        const cartBtn = document.getElementById('cartBtn');
+        const cartBadge = document.getElementById('cartBadge');
+        const cartModal = document.getElementById('cartModal');
+        const cartClose = document.getElementById('cartClose');
+        const cartContent = document.getElementById('cartContent');
+        const reserveBtn = document.getElementById('reserveBtn');
+        const reserveModal = document.getElementById('reserveModal');
+        const reserveClose = document.getElementById('reserveClose');
+        const reserveForm = document.getElementById('reserveForm');
+        const notification = document.getElementById('notification');
+        const menuCards = document.getElementById('menuCards');
+        const themeToggle = document.getElementById('themeToggle');
+        const langBtn = document.getElementById('langBtn');
+        const searchInput = document.getElementById('searchInput');
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+        let cart = JSON.parse(localStorage.getItem('grainCart')) || [];
+        let products = [];
+        let currentLang = localStorage.getItem('grainLang') || 'ru';
+
+        // ===== ПЕРЕВОДЫ =====
+        const translations = {
+            ru: {
+                hero_title: 'Свежеобжаренный спешелти кофе и уют в каждой детали.',
+                btn_reserve: 'Забронировать столик',
+                philosophy_title: 'Философия GRAIN',
+                philosophy_text: 'Мы верим, что идеальный кофе начинается с правильного зерна. Сами привозим спешелти-лорта из Эфиопии и Колумбии, обжариваем их каждую неделю и бережно завариваем для тех, кто ценит настоящий вкус и тишину в большом городе.',
+                menu_title: 'Наше Спешелти Меню',
+                search_placeholder: 'Поиск по меню...',
+                no_results: '😔 Ничего не найдено. Попробуйте другой запрос.',
+                visit_title: 'Ждем вас в гости',
+                visit_hours: 'Ежедневно с 8:00 до 22:00',
+                visit_address: 'ул. Мира, 53',
+                footer_text: '© 2026 GRAIN Coffee. Все права защищены',
+                cart_title: '🛒 Корзина',
+                cart_empty: '☕<br>Корзина пуста<br>Добавьте что-нибудь вкусное!',
+                cart_total: 'Итого:',
+                btn_checkout: 'Оформить заказ',
+                btn_add_to_cart: 'В корзину',
+                btn_added: '✓ Добавлено',
+                reserve_title: '📋 Бронирование столика',
+                form_name: 'Ваше имя',
+                form_name_placeholder: 'Как к вам обращаться?',
+                form_phone: 'Телефон',
+                form_phone_placeholder: '+7 (___) ___-__-__',
+                form_date: 'Дата',
+                form_time: 'Время',
+                form_guests: 'Количество гостей',
+                form_select: 'Выберите...',
+                guest_1: '1 человек',
+                guest_2: '2 человека',
+                guest_3: '3 человека',
+                guest_4: '4 человека',
+                guest_5: '5 человек',
+                guest_6: '6+ человек',
+                btn_submit: 'Забронировать',
+                msg_added: ' добавлен в корзину',
+                msg_removed: 'Товар удалён',
+                msg_ordered: '✅ Заказ на ',
+                msg_ordered_end: ' ₽ оформлен!',
+                msg_reserved: '✅ Столик забронирован! Мы перезвоним.',
+                msg_reserve_error: '❌ Ошибка бронирования',
+                msg_order_error: '❌ Ошибка оформления',
+                lang_label: 'EN'
+            },
+            en: {
+                hero_title: 'Freshly roasted specialty coffee and coziness in every detail.',
+                btn_reserve: 'Reserve a table',
+                philosophy_title: 'GRAIN Philosophy',
+                philosophy_text: 'We believe that perfect coffee starts with the right bean. We import specialty lots from Ethiopia and Colombia ourselves, roast them every week and carefully brew for those who appreciate real taste and silence in a big city.',
+                menu_title: 'Our Specialty Menu',
+                search_placeholder: 'Search menu...',
+                no_results: '😔 Nothing found. Try another query.',
+                visit_title: 'We are waiting for you',
+                visit_hours: 'Daily from 8:00 to 22:00',
+                visit_address: '53 Mira Street',
+                footer_text: '© 2026 GRAIN Coffee. All rights reserved',
+                cart_title: '🛒 Cart',
+                cart_empty: '☕<br>Cart is empty<br>Add something tasty!',
+                cart_total: 'Total:',
+                btn_checkout: 'Checkout',
+                btn_add_to_cart: 'Add to cart',
+                btn_added: '✓ Added',
+                reserve_title: '📋 Table reservation',
+                form_name: 'Your name',
+                form_name_placeholder: 'How should we call you?',
+                form_phone: 'Phone',
+                form_phone_placeholder: '+1 (___) ___-__-__',
+                form_date: 'Date',
+                form_time: 'Time',
+                form_guests: 'Number of guests',
+                form_select: 'Select...',
+                guest_1: '1 person',
+                guest_2: '2 people',
+                guest_3: '3 people',
+                guest_4: '4 people',
+                guest_5: '5 people',
+                guest_6: '6+ people',
+                btn_submit: 'Reserve',
+                msg_added: ' added to cart',
+                msg_removed: 'Item removed',
+                msg_ordered: '✅ Order for ',
+                msg_ordered_end: ' ₽ placed!',
+                msg_reserved: '✅ Table reserved! We will call you back.',
+                msg_reserve_error: '❌ Reservation error',
+                msg_order_error: '❌ Order error',
+                lang_label: 'RU'
+            }
+        };
+
+        // ===== ТЕМА =====
+        function setTheme(theme) {
+            if (theme === 'light') {
+                document.body.classList.add('light-theme');
+                if (themeToggle) themeToggle.textContent = '☀️';
+            } else {
+                document.body.classList.remove('light-theme');
+                if (themeToggle) themeToggle.textContent = '🌙';
+            }
+            localStorage.setItem('grainTheme', theme);
+        }
+
+        // ===== ЯЗЫК =====
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('grainLang', lang);
+            document.documentElement.lang = lang;
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) el.textContent = translations[lang][key];
+            });
+
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (translations[lang][key]) el.placeholder = translations[lang][key];
+            });
+
+            if (langBtn) langBtn.textContent = translations[lang].lang_label;
+
+            if (products.length > 0) renderProducts();
+            if (cartModal.classList.contains('active')) renderCart();
+        }
+
+        setTheme(localStorage.getItem('grainTheme') || 'dark');
+        setLanguage(currentLang);
+
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                setTheme(document.body.classList.contains('light-theme') ? 'dark' : 'light');
+            });
+        }
+
+        if (langBtn) {
+            langBtn.addEventListener('click', () => {
+                setLanguage(currentLang === 'ru' ? 'en' : 'ru');
+            });
+        }
+
+        // ===== ТОВАРЫ =====
+        async function loadProducts() {
+            try {
+                const res = await fetch('/api/products?active=1&t=' + Date.now());
+                products = await res.json();
+                console.log('Загружено товаров:', products.length);
+                renderProducts();
+            } catch (err) {
+                console.error('Ошибка загрузки:', err);
+                if (menuCards) menuCards.innerHTML = '<p>Error loading menu</p>';
+            }
+        }
+
+        function renderProducts(filteredProducts = null) {
+            if (!menuCards) return;
+            const displayProducts = filteredProducts || products;
+            
+            if (displayProducts.length === 0) {
+                menuCards.innerHTML = `<div class="no-results">${translations[currentLang].no_results}</div>`;
+                return;
+            }
+            
+            menuCards.innerHTML = displayProducts.map(p => `
+                <div class="card">
+                    <img src="${p.image || 'images/cappuccino.jpg'}" alt="${p.name}" class="card-image">
+                    <div class="card-content">
+                        <h3>${p.name}</h3>
+                        <span class="price">${p.price} ₽</span>
+                        <button class="btn-cart" data-id="${p.id}" data-name="${p.name}" data-price="${p.price}">${translations[currentLang].btn_add_to_cart}</button>
+                    </div>
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.btn-cart').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.dataset.id;
+                    const name = this.dataset.name;
+                    const price = parseInt(this.dataset.price);
+
+                    const existing = cart.find(item => item.id === id);
+                    if (existing) existing.qty++;
+                    else cart.push({ id, name, price, qty: 1 });
+
+                    saveCart();
+                    updateBadge();
+
+                    this.textContent = translations[currentLang].btn_added;
+                    this.classList.add('added');
+                    setTimeout(() => {
+                        this.textContent = translations[currentLang].btn_add_to_cart;
+                        this.classList.remove('added');
+                    }, 1200);
+
+                    showNotification(name + translations[currentLang].msg_added);
+                });
+            });
+        }
+
+        // ===== ПОИСК =====
+        if (searchInput) {
+            searchInput.addEventListener('input', function(e) {
+                const query = e.target.value.toLowerCase().trim();
+                
+                if (query === '') {
+                    renderProducts();
+                    return;
+                }
+                
+                const filtered = products.filter(p => 
+                    p.name.toLowerCase().includes(query) || 
+                    (p.description && p.description.toLowerCase().includes(query))
+                );
+                
+                renderProducts(filtered);
+            });
+        }
+
+        // ===== КОРЗИНА =====
+        if (cartBtn) {
+            cartBtn.addEventListener('click', () => { renderCart(); cartModal.classList.add('active'); });
+        }
+        if (cartClose) {
+            cartClose.addEventListener('click', () => cartModal.classList.remove('active'));
+        }
+        if (cartModal) {
+            cartModal.addEventListener('click', (e) => { if (e.target === cartModal) cartModal.classList.remove('active'); });
+        }
+
+        function renderCart() {
+            if (!cartContent) return;
+            if (cart.length === 0) {
+                cartContent.innerHTML = '<div class="cart-empty">' + translations[currentLang].cart_empty + '</div>';
+                return;
+            }
+            let html = '<div class="cart-items">';
+            let total = 0;
+            cart.forEach(item => {
+                const itemTotal = item.price * item.qty;
+                total += itemTotal;
+                html += `<div class="cart-item">
+                    <div>
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">${item.price} ₽ × ${item.qty} = ${itemTotal} ₽</div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <button class="qty-btn" onclick="changeQty('${item.id}', -1)">−</button>
+                        <span class="cart-item-qty">${item.qty}</span>
+                        <button class="qty-btn" onclick="changeQty('${item.id}', 1)">+</button>
+                        <button class="cart-item-remove" onclick="removeItem('${item.id}')">🗑</button>
+                    </div>
+                </div>`;
+            });
+            html += `</div>
+                <div class="cart-total">
+                    <span class="cart-total-label">${translations[currentLang].cart_total}</span>
+                    <span class="cart-total-price">${total} ₽</span>
+                </div>
+                <button class="btn-checkout" onclick="checkout()">${translations[currentLang].btn_checkout}</button>`;
+            cartContent.innerHTML = html;
+        }
+
+        function changeQty(id, delta) {
+            const item = cart.find(i => i.id === id);
+            if (item) {
+                item.qty += delta;
+                if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
+                saveCart(); updateBadge(); renderCart();
+            }
+        }
+
+        function removeItem(id) {
+            cart = cart.filter(i => i.id !== id);
+            saveCart(); updateBadge(); renderCart();
+            showNotification(translations[currentLang].msg_removed);
+        }
+
+        async function checkout() {
+            const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+            try {
+                const res = await fetch('/api/orders', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        customer_name: 'Guest',
+                        customer_phone: '',
+                        items: JSON.stringify(cart.map(i => ({ name: i.name, qty: i.qty, price: i.price }))),
+                        total
+                    })
+                });
+                if ((await res.json()).success) {
+                    cartModal.classList.remove('active');
+                    showNotification(translations[currentLang].msg_ordered + total + translations[currentLang].msg_ordered_end);
+                    cart = []; saveCart(); updateBadge();
+                }
+            } catch (err) { showNotification(translations[currentLang].msg_order_error); }
+        }
+
+        // ===== БРОНИРОВАНИЕ =====
+        if (reserveBtn) {
+            reserveBtn.addEventListener('click', () => reserveModal.classList.add('active'));
+        }
+        if (reserveClose) {
+            reserveClose.addEventListener('click', () => reserveModal.classList.remove('active'));
+        }
+        if (reserveModal) {
+            reserveModal.addEventListener('click', (e) => { if (e.target === reserveModal) reserveModal.classList.remove('active'); });
+        }
+
+        if (reserveForm) {
+            reserveForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                try {
+                    const res = await fetch('/api/orders', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            customer_name: `${document.getElementById('resName').value} (booking: ${document.getElementById('resDate').value} ${document.getElementById('resTime').value})`,
+                            customer_phone: document.getElementById('resPhone').value,
+                            items: '[]',
+                            total: 0
+                        })
+                    });
+                    if ((await res.json()).success) {
+                        reserveModal.classList.remove('active');
+                        showNotification(translations[currentLang].msg_reserved);
+                        reserveForm.reset();
+                    }
+                } catch (err) { showNotification(translations[currentLang].msg_reserve_error); }
+            });
+        }
+
+        // ===== КНОПКА НАВЕРХ =====
+        if (scrollTopBtn) {
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 400) {
+                    scrollTopBtn.classList.add('visible');
+                } else {
+                    scrollTopBtn.classList.remove('visible');
+                }
+            });
+
+            scrollTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+
+        // ===== УТИЛИТЫ =====
+        function saveCart() { localStorage.setItem('grainCart', JSON.stringify(cart)); }
+
+        function updateBadge() {
+            const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+            if (totalQty > 0) { 
+                if (cartBadge) { cartBadge.style.display = 'flex'; cartBadge.textContent = totalQty; }
+            } else { 
+                if (cartBadge) cartBadge.style.display = 'none'; 
+            }
+        }
+
+        function showNotification(text) {
+            if (!notification) return;
+            notification.textContent = text;
+            notification.classList.add('show');
+            setTimeout(() => notification.classList.remove('show'), 2500);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') { 
+                if (cartModal) cartModal.classList.remove('active'); 
+                if (reserveModal) reserveModal.classList.remove('active'); 
+            }
+        });
+
+        // ===== ЗАПУСК =====
+        loadProducts();
+        updateBadge();
+    </script>
+</body>
+</html>

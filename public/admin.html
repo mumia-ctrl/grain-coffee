@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRAIN — Админ панель</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2a2a2a;
+    --text-primary: #ffffff;
+    --text-muted: #888888;
+    --border: #333333;
+    --accent: #7a9e7e;
+}
+
+body.light-theme {
+    --bg-primary: #f5f5f5;
+    --bg-secondary: #ffffff;
+    --text-primary: #1c1c1c;
+    --text-muted: #666666;
+    --border: #e0e0e0;
+}
+
+body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background 0.3s, color 0.3s;
+}
+
+.login-box, .add-form, .product-card, .order-card, .admin-panel > div[style] {
+    background: var(--bg-secondary) !important;
+}
+
+.login-box input, .form-row input, .form-row textarea {
+    background: var(--bg-primary);
+    border-color: var(--border);
+    color: var(--text-primary);
+}
+
+.admin-header { border-bottom-color: var(--border); }
+.cart-item { border-bottom-color: var(--border); }
+        body {
+            background: #1a1a1a;
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+        }
+
+        .login-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .login-box {
+            background: #2a2a2a;
+            padding: 40px;
+            border-radius: 16px;
+            width: 350px;
+            text-align: center;
+        }
+
+        .login-box h2 { margin-bottom: 25px; font-size: 24px; }
+
+        .login-box input {
+            width: 100%;
+            padding: 14px;
+            background: #1a1a1a;
+            border: 1px solid #444;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .login-box input:focus { outline: none; border-color: #7a9e7e; }
+
+        .login-box button {
+            width: 100%;
+            padding: 14px;
+            background: #7a9e7e;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .login-box button:hover { background: #6a8e6e; }
+
+        .admin-panel { display: none; padding: 30px; }
+        .admin-panel.active { display: block; }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #333;
+        }
+
+        .admin-header h1 { font-size: 28px; }
+
+        .btn-logout {
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: #2a2a2a;
+            border: none;
+            border-radius: 10px;
+            color: #aaa;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .tab.active { background: #7a9e7e; color: #fff; }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .add-form {
+            background: #2a2a2a;
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+        }
+
+        .add-form h3 { margin-bottom: 20px; }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .form-row input, .form-row textarea {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px;
+            background: #1a1a1a;
+            border: 1px solid #444;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .form-row input:focus, .form-row textarea:focus {
+            outline: none;
+            border-color: #7a9e7e;
+        }
+
+        .btn-add {
+            background: #7a9e7e;
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .btn-add:hover { background: #6a8e6e; }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background: #2a2a2a;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .product-card-body { padding: 15px; }
+        .product-card-body h4 { margin-bottom: 8px; }
+        .product-card-body .price { color: #7a9e7e; font-weight: 600; margin-bottom: 10px; }
+
+        .product-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-edit, .btn-delete, .btn-toggle {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .btn-edit { background: #3498db; color: #fff; }
+        .btn-delete { background: #e74c3c; color: #fff; }
+        .btn-toggle { background: #f39c12; color: #fff; }
+
+        .orders-list { display: flex; flex-direction: column; gap: 15px; }
+
+        .order-card {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #7a9e7e;
+        }
+
+        .order-card .order-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .order-card .order-name { font-weight: 600; font-size: 16px; }
+        .order-card .order-date { color: #888; font-size: 14px; }
+        .order-card .order-phone { color: #aaa; margin-bottom: 10px; }
+        .order-card .order-items { color: #ccc; margin-bottom: 10px; font-size: 14px; }
+        .order-card .order-total { font-size: 18px; font-weight: 700; color: #7a9e7e; }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-new { background: #3498db; }
+        .status-done { background: #27ae60; }
+        .status-cancelled { background: #e74c3c; }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+            font-size: 18px;
+        }
+
+        .msg {
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .msg-success { background: #27ae60; color: #fff; }
+        .msg-error { background: #e74c3c; color: #fff; }
+    </style>
+</head>
+<body>
+
+    <!-- Экран входа -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-box">
+            <h2 data-i18n="login_title">🔐 Вход в админку</h2>
+            <div id="loginMsg"></div>
+           <input type="password" id="passwordInput" data-i18n-placeholder="login_password" placeholder="Пароль">
+<button onclick="login()" data-i18n="login_btn">Войти</button>
+<p style="margin-top:15px;color:#666;font-size:13px;" data-i18n="login_hint">Пароль: admin123</p>
+        </div>
+    </div>
+
+    <!-- Админ панель -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-header">
+            <h1>️ Админ панель GRAIN</h1>
+            <button class="theme-toggle" id="adminThemeToggle" style="background:none;border:2px solid #555;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:18px;margin-right:10px;">🌙</button>
+<button class="theme-toggle" id="adminLangBtn" style="background:none;border:2px solid #555;border-radius:22px;width:auto;padding:0 14px;height:40px;cursor:pointer;font-size:13px;font-weight:700;margin-right:10px;color:#fff;">EN</button>
+            <button class="btn-logout" onclick="logout()">Выйти</button>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('products')">📦 Товары</button>
+            <button class="tab" onclick="switchTab('orders')">📋 Заказы</button>
+        </div>
+
+        <!-- Товары -->
+        <div class="tab-content active" id="tab-products">
+            <div class="add-form">
+                <h3 id="formTitle">➕ Добавить товар</h3>
+                <div id="formMsg"></div>
+                <div class="form-row">
+                    <input type="text" id="prodName" placeholder="Название товара">
+                    <input type="number" id="prodPrice" placeholder="Цена (₽)">
+                </div>
+                <div class="form-row">
+                    <textarea id="prodDesc" placeholder="Описание" rows="2"></textarea>
+                </div>
+                <div class="form-row">
+                    <input type="file" id="prodImage" accept="image/*">
+                    <button class="btn-add" onclick="saveProduct()" id="saveBtn">Добавить</button>
+                    <button class="btn-add" onclick="cancelEdit()" id="cancelBtn" style="display:none;background:#888;">Отмена</button>
+                </div>
+            </div>
+
+            <div class="products-grid" id="productsGrid"></div>
+        </div>
+
+        <!-- Заказы -->
+        <div class="tab-content" id="tab-orders">
+            <div class="orders-list" id="ordersList"></div>
+        </div>
+    </div>
+
+    <script>
+        // Тема
+function setAdminTheme(theme) {
+    if (theme === 'light') {
+        document.body.classList.add('light-theme');
+        document.getElementById('adminThemeToggle').textContent = '☀️';
+    } else {
+        document.body.classList.remove('light-theme');
+        document.getElementById('adminThemeToggle').textContent = '🌙';
+    }
+    localStorage.setItem('grainTheme', theme);
+}
+
+const savedAdminTheme = localStorage.getItem('grainTheme') || 'dark';
+setAdminTheme(savedAdminTheme);
+
+document.getElementById('adminThemeToggle').addEventListener('click', () => {
+    const isLight = document.body.classList.contains('light-theme');
+    setAdminTheme(isLight ? 'dark' : 'light');
+});
+        let token = localStorage.getItem('adminToken');
+        // ===== ПЕРЕВОДЫ АДМИНКИ =====
+const adminTranslations = {
+    ru: {
+        login_title: '🔐 Вход в админку',
+        login_password: 'Пароль',
+        login_btn: 'Войти',
+        login_hint: 'Пароль: admin123',
+        login_error: '❌ Неверный пароль',
+        login_conn_error: '❌ Ошибка соединения',
+        admin_title: '⚙️ Админ панель GRAIN',
+        btn_logout: 'Выйти',
+        tab_products: '📦 Товары',
+        tab_orders: '📋 Заказы',
+        add_title: '➕ Добавить товар',
+        edit_title: '✏️ Редактировать товар',
+        prod_name: 'Название товара',
+        prod_price: 'Цена (₽)',
+        prod_desc: 'Описание',
+        btn_add: 'Добавить',
+        btn_save: 'Сохранить',
+        btn_cancel: 'Отмена',
+        msg_saved: '✅ Сохранено!',
+        msg_error: 'Ошибка',
+        msg_conn_error: 'Ошибка соединения',
+        msg_fill: 'Заполните название и цену',
+        btn_edit: '✏️ Изменить',
+        btn_hide: '🙈 Скрыть',
+        btn_show: '👁️ Показать',
+        btn_delete: '🗑 Удалить',
+        no_desc: 'Нет описания',
+        no_products: 'Товаров пока нет',
+        delete_confirm: 'Удалить товар?',
+        welcome_title: '👋 Добро пожаловать!',
+        welcome_text: 'Здесь вы можете управлять товарами и заказами.',
+        manage_products: '📦 Управление товарами',
+        manage_products_desc: 'Добавляйте, редактируйте и удаляйте товары в меню',
+        btn_goto_products: 'Перейти к товарам',
+        orders_title: '📋 Заказы',
+        orders_desc: 'Просматривайте заказы от клиентов',
+        btn_view_orders: 'Посмотреть заказы',
+        lang_label: 'EN'
+    },
+    en: {
+        login_title: '🔐 Admin login',
+        login_password: 'Password',
+        login_btn: 'Sign in',
+        login_hint: 'Password: admin123',
+        login_error: '❌ Wrong password',
+        login_conn_error: '❌ Connection error',
+        admin_title: '⚙️ GRAIN Admin Panel',
+        btn_logout: 'Logout',
+        tab_products: '📦 Products',
+        tab_orders: '📋 Orders',
+        add_title: '➕ Add product',
+        edit_title: '✏️ Edit product',
+        prod_name: 'Product name',
+        prod_price: 'Price (₽)',
+        prod_desc: 'Description',
+        btn_add: 'Add',
+        btn_save: 'Save',
+        btn_cancel: 'Cancel',
+        msg_saved: '✅ Saved!',
+        msg_error: 'Error',
+        msg_conn_error: 'Connection error',
+        msg_fill: 'Fill in name and price',
+        btn_edit: '✏️ Edit',
+        btn_hide: '🙈 Hide',
+        btn_show: '👁️ Show',
+        btn_delete: '🗑 Delete',
+        no_desc: 'No description',
+        no_products: 'No products yet',
+        delete_confirm: 'Delete product?',
+        welcome_title: '👋 Welcome!',
+        welcome_text: 'Here you can manage products and orders.',
+        manage_products: '📦 Product management',
+        manage_products_desc: 'Add, edit and delete menu items',
+        btn_goto_products: 'Go to products',
+        orders_title: '📋 Orders',
+        orders_desc: 'View customer orders',
+        btn_view_orders: 'View orders',
+        lang_label: 'RU'
+    }
+};
+
+let currentAdminLang = localStorage.getItem('grainAdminLang') || 'ru';
+
+function setAdminLanguage(lang) {
+    currentAdminLang = lang;
+    localStorage.setItem('grainAdminLang', lang);
+    const t = adminTranslations[lang];
+
+    // Обновляем все элементы с data-i18n
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key]) el.textContent = t[key];
+    });
+
+    // Placeholder
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (t[key]) el.placeholder = t[key];
+    });
+
+    // Кнопка языка
+    const langBtn = document.getElementById('adminLangBtn');
+    if (langBtn) langBtn.textContent = t.lang_label;
+}
+
+// Инициализация языка в админке
+setAdminLanguage(currentAdminLang);
+
+document.getElementById('adminLangBtn').addEventListener('click', () => {
+    setAdminLanguage(currentAdminLang === 'ru' ? 'en' : 'ru');
+});
+        let products = [];
+        let orders = [];
+        let editingId = null;
+
+        if (token) {
+            showAdmin();
+        }
+
+        async function login() {
+            const password = document.getElementById('passwordInput').value;
+            const loginMsg = document.getElementById('loginMsg');
+            
+            try {
+                const res = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password })
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    token = data.token;
+                    localStorage.setItem('adminToken', token);
+                    showAdmin();
+                } else {
+                    loginMsg.innerHTML = '<div class="msg msg-error">❌ Неверный пароль</div>';
+                }
+            } catch (err) {
+                loginMsg.innerHTML = '<div class="msg msg-error">❌ Ошибка соединения</div>';
+            }
+        }
+
+        function logout() {
+            token = null;
+            localStorage.removeItem('adminToken');
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('adminPanel').classList.remove('active');
+        }
+
+        function showAdmin() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('adminPanel').classList.add('active');
+            loadProducts();
+            loadOrders();
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(`tab-${tab}`).classList.add('active');
+        }
+
+        async function loadProducts() {
+            try {
+                const res = await fetch('/api/products');
+                products = await res.json();
+                renderProducts();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            if (products.length === 0) {
+                grid.innerHTML = '<div class="empty-state">Товаров пока нет</div>';
+                return;
+            }
+
+            grid.innerHTML = products.map(p => `
+                <div class="product-card">
+                    <img src="${p.image || 'images/cappuccino.jpg'}" alt="${p.name}">
+                    <div class="product-card-body">
+                        <h4>${p.name}</h4>
+                        <div class="price">${p.price} ₽</div>
+                        <p style="color:#888;font-size:13px;margin-bottom:10px;">${p.description || 'Нет описания'}</p>
+                        <div class="product-actions">
+                            <button class="btn-edit" onclick="editProduct(${p.id})">✏️ Изменить</button>
+                            <button class="btn-toggle" onclick="toggleProduct(${p.id}, ${p.active})">${p.active ? '🙈 Скрыть' : '👁️ Показать'}</button>
+                            <button class="btn-delete" onclick="deleteProduct(${p.id})">🗑 Удалить</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function saveProduct() {
+            const name = document.getElementById('prodName').value.trim();
+            const price = document.getElementById('prodPrice').value;
+            const description = document.getElementById('prodDesc').value.trim();
+            const imageFile = document.getElementById('prodImage').files[0];
+            const formMsg = document.getElementById('formMsg');
+
+            if (!name || !price) {
+                formMsg.innerHTML = '<div class="msg msg-error">Заполните название и цену</div>';
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('price', price);
+            formData.append('description', description);
+            if (imageFile) formData.append('image', imageFile);
+
+            try {
+                let url = '/api/products';
+                let method = 'POST';
+
+                if (editingId) {
+                    url = `/api/products/${editingId}`;
+                    method = 'PUT';
+                }
+
+                const res = await fetch(url, {
+                    method,
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: formData
+                });
+
+                if (res.ok) {
+                    formMsg.innerHTML = '<div class="msg msg-success">✅ Сохранено!</div>';
+                    clearForm();
+                    loadProducts();
+                    setTimeout(() => formMsg.innerHTML = '', 2000);
+                } else {
+                    formMsg.innerHTML = '<div class="msg msg-error">Ошибка</div>';
+                }
+            } catch (err) {
+                formMsg.innerHTML = '<div class="msg msg-error">Ошибка соединения</div>';
+            }
+        }
+
+        function editProduct(id) {
+            const p = products.find(x => x.id === id);
+            if (!p) return;
+
+            editingId = id;
+            document.getElementById('prodName').value = p.name;
+            document.getElementById('prodPrice').value = p.price;
+            document.getElementById('prodDesc').value = p.description || '';
+            document.getElementById('formTitle').textContent = '✏️ Редактировать товар';
+            document.getElementById('saveBtn').textContent = 'Сохранить';
+            document.getElementById('cancelBtn').style.display = 'inline-block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function cancelEdit() {
+            clearForm();
+        }
+
+        function clearForm() {
+            editingId = null;
+            document.getElementById('prodName').value = '';
+            document.getElementById('prodPrice').value = '';
+            document.getElementById('prodDesc').value = '';
+            document.getElementById('prodImage').value = '';
+            document.getElementById('formTitle').textContent = '➕ Добавить товар';
+            document.getElementById('saveBtn').textContent = 'Добавить';
+            document.getElementById('cancelBtn').style.display = 'none';
+        }
+
+        async function toggleProduct(id, currentActive) {
+            const newActive = currentActive ? 0 : 1;
+            const p = products.find(x => x.id === id);
+            try {
+                await fetch(`/api/products/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: p.name,
+                        price: p.price,
+                        description: p.description || '',
+                        active: newActive
+                    })
+                });
+                loadProducts();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function deleteProduct(id) {
+            if (!confirm('Удалить товар?')) return;
+            try {
+                await fetch(`/api/products/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                loadProducts();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function loadOrders() {
+            try {
+                const res = await fetch('/api/orders', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                orders = await res.json();
+                renderOrders();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function renderOrders() {
+            const list = document.getElementById('ordersList');
+            if (orders.length === 0) {
+                list.innerHTML = '<div class="empty-state">Заказов пока нет</div>';
+                return;
+            }
+
+            list.innerHTML = orders.map(o => {
+                let itemsText = '—';
+                try {
+                    const items = JSON.parse(o.items);
+                    if (Array.isArray(items) && items.length > 0) {
+                        itemsText = items.map(i => `${i.name} × ${i.qty}`).join(', ');
+                    }
+                } catch (e) {}
+
+                const statusClass = o.status === 'new' ? 'status-new' : o.status === 'done' ? 'status-done' : 'status-cancelled';
+                const statusText = o.status === 'new' ? 'Новый' : o.status === 'done' ? 'Выполнен' : 'Отменён';
+
+                return `
+                    <div class="order-card">
+                        <div class="order-header">
+                            <span class="order-name">Заказ #${o.id}</span>
+                            <span class="status-badge ${statusClass}">${statusText}</span>
+                        </div>
+                        <div class="order-date">${o.created_at}</div>
+                        <div class="order-phone">👤 ${o.customer_name} | 📞 ${o.customer_phone || 'не указан'}</div>
+                        <div class="order-items"> ${itemsText}</div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <span class="order-total">${o.total} ₽</span>
+                            <div style="display:flex;gap:8px;">
+                                <button class="btn-edit" onclick="updateOrderStatus(${o.id}, 'done')">✅ Выполнен</button>
+                                <button class="btn-delete" onclick="updateOrderStatus(${o.id}, 'cancelled')">❌ Отменить</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function updateOrderStatus(id, status) {
+            try {
+                await fetch(`/api/orders/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status })
+                });
+                loadOrders();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        document.getElementById('passwordInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') login();
+        });
+    </script>
+</body>
+</html>
